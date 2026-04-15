@@ -14,24 +14,24 @@ import java.util.Arrays;
 public class JsonWriter {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    static Path filePath = Paths.get("/Users/irynamusiienko/IdeaProjects/java-projects-roadmap/src/main/java/de/volodymyr/learning/strings.json");
+    static Path filePath = Paths.get("text.json");
 
-    public static StringBuilder jsonConverter(Task obj) {
+    public static String jsonConverter(Task obj) {
         String creationTime = obj.createdAt().truncatedTo(ChronoUnit.SECONDS)
                 .format(FORMATTER);
         String updateTime = obj.updatedAt().truncatedTo(ChronoUnit.SECONDS)
                 .format(FORMATTER);
-        return new StringBuilder().append("{")
-                .append("\"id\": ").append(obj.id()).append(",")
-                .append("\"description\": \"").append(obj.description()).append("\",")
-                .append("\"status\": \"").append(obj.status()).append("\",")
-                .append("\"createdAt\": \"").append(creationTime).append("\",")
-                .append("\"updatedAt\": \"").append(updateTime).append("\"")
-                .append("}");
+        return "{" +
+                "\"id\": " + obj.id() + "," +
+                "\"description\": \"" + obj.description() + "\"," +
+                "\"status\": \"" + obj.status() + "\"," +
+                "\"createdAt\": \"" + creationTime + "\"," +
+                "\"updatedAt\": \"" + updateTime + "\"" +
+                "}";
 
     }
 
-    public static void jsonTaskWriter(StringBuilder string) {
+    public static void jsonTaskWriter(String string) {
         try {
             Files.createFile(filePath);
         } catch (FileAlreadyExistsException faex) {
