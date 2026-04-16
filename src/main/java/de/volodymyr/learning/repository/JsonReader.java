@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JsonReader {
-    public static void main(String[] args) {
 
-    }
     public static Task readTask(String jsonString){
             int idOffset = "id\":".length();
             int beginIndexID = jsonString.indexOf("id\":") + idOffset;
