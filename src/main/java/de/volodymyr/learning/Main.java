@@ -21,7 +21,7 @@ public class Main {
 
 
 
-    private static Path filePath = Paths.get("text.json");
+    private static final Path filePath = Paths.get("text.json");
 
     public static Path getFilePath(){
         return filePath;
