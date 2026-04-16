@@ -17,25 +17,9 @@ public class JsonReader {
             int endIndexId = jsonString.indexOf(",");
             int id = Integer.parseInt(jsonString.substring(beginIndexID,endIndexId).trim());
 
-            String transformedString = jsonString.substring(endIndexId + 2);
-            List<String> allStringParsed = new ArrayList<>();
+        List<String> allStringParsed = getStrings(jsonString, endIndexId);
 
-            while (!transformedString.isBlank()){
-
-                int beginIndexOffset = "\": \"".length();
-                int beginIndexForParsing = transformedString.indexOf("\": \"") + beginIndexOffset;
-                int endIndexOffset = "\",".length();
-                int endIndexForParsing = transformedString.indexOf("\",");
-                if (endIndexForParsing == -1){
-                    endIndexForParsing = transformedString.indexOf("\"}");
-                }
-                    String parsedString = transformedString.substring(beginIndexForParsing, endIndexForParsing);
-                    transformedString = transformedString.substring(endIndexForParsing + endIndexOffset);  // +2 because the "\," left in a new String
-                    allStringParsed.add(parsedString);
-
-            }
-
-            LocalDateTime createdAt = LocalDateTime.parse(allStringParsed.get(2), JsonWriter.getFormatter());
+        LocalDateTime createdAt = LocalDateTime.parse(allStringParsed.get(2), JsonWriter.getFormatter());
             LocalDateTime updatedAt = LocalDateTime.parse(allStringParsed.get(3), JsonWriter.getFormatter());
 
             TaskStatus status = Enum.valueOf(TaskStatus.class, allStringParsed.get(1));
@@ -48,6 +32,26 @@ public class JsonReader {
 
     }
 
+    private static List<String> getStrings(String jsonString, int endIndexId) {
+        String transformedString = jsonString.substring(endIndexId + 2);
+        List<String> allStringParsed = new ArrayList<>();
+
+        while (!transformedString.isBlank()){
+
+            int beginIndexOffset = "\": \"".length();
+            int beginIndexForParsing = transformedString.indexOf("\": \"") + beginIndexOffset;
+            int endIndexOffset = "\",".length();
+            int endIndexForParsing = transformedString.indexOf("\",");
+            if (endIndexForParsing == -1){
+                endIndexForParsing = transformedString.indexOf("\"}");
+            }
+                String parsedString = transformedString.substring(beginIndexForParsing, endIndexForParsing);
+                transformedString = transformedString.substring(endIndexForParsing + endIndexOffset);  // +2 because the "\," left in a new String
+                allStringParsed.add(parsedString);
+
+        }
+        return allStringParsed;
+    }
 
 
 }
