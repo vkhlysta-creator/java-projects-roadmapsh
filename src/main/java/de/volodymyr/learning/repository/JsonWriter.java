@@ -1,6 +1,7 @@
-package de.volodymyr.learning;
+package de.volodymyr.learning.repository;
 
-import de.volodymyr.learning.Main.Task;
+import de.volodymyr.learning.Main;
+import de.volodymyr.learning.model.Task;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +34,7 @@ public class JsonWriter {
 
     public static void jsonTaskWriter(String string) {
         try {
-            Files.writeString(Main.filePath, string);
+            Files.writeString(Main.getFilePath(), string);
         } catch (IOException ioException) {
             System.out.println(Arrays.toString(ioException.getStackTrace()));
         }

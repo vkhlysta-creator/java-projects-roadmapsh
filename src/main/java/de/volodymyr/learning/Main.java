@@ -3,6 +3,11 @@ package de.volodymyr.learning;
 
 
 
+import de.volodymyr.learning.model.Task;
+import de.volodymyr.learning.model.TaskStatus;
+import de.volodymyr.learning.repository.JsonReader;
+import de.volodymyr.learning.repository.JsonWriter;
+
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -13,12 +18,14 @@ import java.util.Arrays;
 
 
 public class Main {
-    public record Task(int id, String description, TaskStatus status, LocalDateTime createdAt,
-                       LocalDateTime updatedAt) {
-    }
 
-    enum TaskStatus {TODO, IN_PROGRESS, DONE}
-    static Path filePath = Paths.get("text.json");
+
+
+    private static Path filePath = Paths.get("text.json");
+
+    public static Path getFilePath(){
+        return filePath;
+    }
 
 
 
@@ -38,7 +45,7 @@ public class Main {
         try {
             String jsonString = Files.readString(Main.filePath);
             Task parsedTask = JsonReader.readTask(jsonString);
-            System.out.println(parsedTask.description());
+            System.out.println(parsedTask);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
