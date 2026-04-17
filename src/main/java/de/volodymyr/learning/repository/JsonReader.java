@@ -9,8 +9,8 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JsonReader {
 
@@ -68,26 +68,37 @@ public class JsonReader {
             int firstIndexOffset = "[".length();
             int indexFirstBracket = allLines.indexOf("[");
             int indexSecondBracket = allLines.indexOf("]");
+
+            if (allLines.isBlank()){
+                return Collections.emptyList();
+            }
+
             String stringWithoutBrackets = allLines.substring(indexFirstBracket + firstIndexOffset, indexSecondBracket);
             List<String> splitedStringFinal = new ArrayList<>();
+            if (stringWithoutBrackets.isBlank()){
+                return new ArrayList<>();
+            }
             if (stringWithoutBrackets.contains("},")) {
-                String[] splitedString = stringWithoutBrackets.split("},");
+                String[] splitedString = stringWithoutBrackets.split("},\\{");
                 splitedStringFinal = Arrays.stream(splitedString)
-                        .map(str -> str + "}")
+                        .map(str -> {
+                            String clean = str.replace("{", "").replace("}", "");
+                            return "{" + clean + "}";
+                        })
                         .toList();
             }else
                 splitedStringFinal.add(stringWithoutBrackets);
 
-            return splitedStringFinal.stream()
+            return new ArrayList<>(splitedStringFinal.stream()
                     .map(JsonReader::readTask)
-                    .toList();
+                    .toList());
 
 
 
         } catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
-        return null;
+        return new ArrayList<>();
     }
 
 

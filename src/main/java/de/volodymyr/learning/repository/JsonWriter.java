@@ -2,16 +2,14 @@ package de.volodymyr.learning.repository;
 
 import de.volodymyr.learning.Main;
 import de.volodymyr.learning.model.Task;
-import de.volodymyr.learning.model.TaskStatus;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JsonWriter {
 
@@ -21,10 +19,6 @@ public class JsonWriter {
         return FORMATTER;
     }
 
-    public static void main(String[] args) {
-        Task firstTask = new Task(5, "Sell a cat", TaskStatus.TODO, LocalDateTime.now(), LocalDateTime.now());
-
-    }
 
     public static String jsonConverter(Task obj) {
         String creationTime = obj.createdAt().truncatedTo(ChronoUnit.SECONDS)
@@ -41,10 +35,16 @@ public class JsonWriter {
 
     }
 
+    public static String preparingListToWriting(List<Task> tasks){
+        return tasks.stream()
+                .map(JsonWriter::jsonConverter)
+                .collect(Collectors.joining(","));
+    }
 
-    public static void jsonTaskWriter(List<String> string) {
+
+    public static void jsonTaskWriter(String string) {
         try {
-            Files.writeString(Main.getFilePath(),  "[" +  String.join(",", string) + "]");
+                Files.writeString(Main.getFilePath(),  "[" + string + "]");
         } catch (IOException ioException) {
             System.out.println(Arrays.toString(ioException.getStackTrace()));
         }
