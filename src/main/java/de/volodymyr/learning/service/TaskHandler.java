@@ -13,13 +13,6 @@ import java.util.NoSuchElementException;
 
 public class TaskHandler {
 
-    public static void main(String[] args) {
-        try {
-            handleList();
-        } catch (NoSuchElementException e) {
-            System.out.println("NoSuchElementException");
-        }
-    }
 
 
     public static void handleAdd(String description) throws NoSuchElementException{
@@ -45,7 +38,7 @@ public class TaskHandler {
             System.out.println("Your list of Tasks is empty! Chill");
         }
 
-        DateTimeFormatter Formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 
         System.out.println("-------------------------------------------------------------------");
@@ -66,7 +59,7 @@ public class TaskHandler {
                     task.id(),
                     iconOfStatus +" " +  task.status(),
                     task.description(),
-                    task.createdAt().format(Formatter)
+                    task.createdAt().format(formatter)
                     );
 
         }
