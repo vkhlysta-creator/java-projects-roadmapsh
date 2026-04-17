@@ -1,13 +1,24 @@
 package de.volodymyr.learning.repository;
 
+import de.volodymyr.learning.Main;
 import de.volodymyr.learning.model.Task;
 import de.volodymyr.learning.model.TaskStatus;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class JsonReader {
+
+    public static void main(String[] args) {
+        List<Task> tasks = loadAll();
+        System.out.println(tasks);
+
+    }
 
     public static Task readTask(String jsonString){
             int idOffset = "id\":".length();
@@ -44,11 +55,39 @@ public class JsonReader {
                 endIndexForParsing = transformedString.indexOf("\"}");
             }
                 String parsedString = transformedString.substring(beginIndexForParsing, endIndexForParsing);
-                transformedString = transformedString.substring(endIndexForParsing + endIndexOffset);  // +2 because the "\," left in a new String
+                transformedString = transformedString.substring(endIndexForParsing + endIndexOffset);
                 allStringParsed.add(parsedString);
 
         }
         return allStringParsed;
+    }
+
+    public static List<Task> loadAll(){
+        try {
+            String allLines =  Files.readString(Main.getFilePath());
+            int firstIndexOffset = "[".length();
+            int indexFirstBracket = allLines.indexOf("[");
+            int indexSecondBracket = allLines.indexOf("]");
+            String stringWithoutBrackets = allLines.substring(indexFirstBracket + firstIndexOffset, indexSecondBracket);
+            List<String> splitedStringFinal = new ArrayList<>();
+            if (stringWithoutBrackets.contains("},")) {
+                String[] splitedString = stringWithoutBrackets.split("},");
+                splitedStringFinal = Arrays.stream(splitedString)
+                        .map(str -> str + "}")
+                        .toList();
+            }else
+                splitedStringFinal.add(stringWithoutBrackets);
+
+            return splitedStringFinal.stream()
+                    .map(JsonReader::readTask)
+                    .toList();
+
+
+
+        } catch (IOException e) {
+            System.out.println(Arrays.toString(e.getStackTrace()));
+        }
+        return null;
     }
 
 

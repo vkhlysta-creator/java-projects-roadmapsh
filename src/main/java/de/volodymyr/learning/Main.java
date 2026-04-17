@@ -39,16 +39,19 @@ public class Main {
         }
 
         Task newTask = new Task(1, "Buy a cat", TaskStatus.TODO, LocalDateTime.now(), LocalDateTime.now());
+        Task newTask2 = new Task(2, "Buy a dog", TaskStatus.TODO, LocalDateTime.now(), LocalDateTime.now());
+        Task newTask3 = new Task(3, "Buy a cock", TaskStatus.TODO, LocalDateTime.now(), LocalDateTime.now());
 
-        JsonWriter.jsonTaskWriter(JsonWriter.jsonConverter(newTask));
 
-        try {
-            String jsonString = Files.readString(Main.filePath);
-            Task parsedTask = JsonReader.readTask(jsonString);
-            System.out.println(parsedTask);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+
+//        try {
+//            String jsonString = Files.readString(Main.filePath);
+//            Task parsedTask = JsonReader.readTask(jsonString);
+//            System.out.println(parsedTask);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }

@@ -2,12 +2,16 @@ package de.volodymyr.learning.repository;
 
 import de.volodymyr.learning.Main;
 import de.volodymyr.learning.model.Task;
+import de.volodymyr.learning.model.TaskStatus;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 
 public class JsonWriter {
 
@@ -15,6 +19,11 @@ public class JsonWriter {
 
     public static DateTimeFormatter getFormatter(){
         return FORMATTER;
+    }
+
+    public static void main(String[] args) {
+        Task firstTask = new Task(5, "Sell a cat", TaskStatus.TODO, LocalDateTime.now(), LocalDateTime.now());
+
     }
 
     public static String jsonConverter(Task obj) {
@@ -32,12 +41,14 @@ public class JsonWriter {
 
     }
 
-    public static void jsonTaskWriter(String string) {
+
+    public static void jsonTaskWriter(List<String> string) {
         try {
-            Files.writeString(Main.getFilePath(), string);
+            Files.writeString(Main.getFilePath(),  "[" +  String.join(",", string) + "]");
         } catch (IOException ioException) {
             System.out.println(Arrays.toString(ioException.getStackTrace()));
         }
     }
 
 }
+// Нужно разделить эту задачу: Прочитать файл -> то что внутри квадратных скобок -> добавить новую строку -> добавить квадратные скобки!
