@@ -47,6 +47,15 @@ public class Main {
                     TaskHandler.handleAdd(args[1]);
                 }
             }
+            case "delete" -> {
+
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID of the task, which must be deleted");
+                }
+                else {
+                    TaskHandler.handleDelete(args[1]);
+                }
+            }
             default -> System.out.println("Unknown command: " + command);
         }
     }

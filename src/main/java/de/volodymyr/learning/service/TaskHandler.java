@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class TaskHandler {
 
@@ -31,14 +32,14 @@ public class TaskHandler {
 
     }
 
-    public static void handleList(){
+    public static void handleList() {
         List<Task> tasks = JsonReader.loadAll();
 
         if (tasks.isEmpty()){
             System.out.println("Your list of Tasks is empty! Chill");
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter Formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 
         System.out.println("-------------------------------------------------------------------");
@@ -59,11 +60,30 @@ public class TaskHandler {
                     task.id(),
                     iconOfStatus +" " +  task.status(),
                     task.description(),
-                    task.createdAt().format(formatter)
+                    task.createdAt().format(Formatter)
                     );
 
         }
         System.out.println("-------------------------------------------------------------------");
+
+    }
+
+    public static void handleDelete(String id){
+        List<Task> currentTasks = JsonReader.loadAll();
+        String foundString = currentTasks.stream()
+                .map(JsonWriter::jsonConverter)
+                .filter(str -> str.contains("\"id\": " + id))
+                .collect(Collectors.joining());
+
+        if (foundString.isBlank())
+            System.out.println("Error: Task with ID:" + id + " not found");
+        else {
+            currentTasks.remove(JsonReader.readTask(foundString));
+            JsonWriter.jsonTaskWriter(JsonWriter.preparingListToWriting(currentTasks));
+            System.out.println("Task " + id + " deleted successfully!");
+        }
+
+
 
     }
 

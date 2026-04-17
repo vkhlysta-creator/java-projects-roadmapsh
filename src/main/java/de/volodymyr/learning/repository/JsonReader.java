@@ -13,11 +13,7 @@ import java.util.List;
 
 public class JsonReader {
 
-    public static void main(String[] args) {
-        List<Task> tasks = loadAll();
-        System.out.println(tasks);
 
-    }
 
     public static Task readTask(String jsonString){
             int idOffset = "id\":".length();
