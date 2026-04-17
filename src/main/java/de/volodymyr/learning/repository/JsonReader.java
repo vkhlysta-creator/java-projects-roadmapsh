@@ -70,7 +70,7 @@ public class JsonReader {
             int indexSecondBracket = allLines.indexOf("]");
 
             if (allLines.isBlank()){
-                return Collections.emptyList();
+                return new ArrayList<>();
             }
 
             String stringWithoutBrackets = allLines.substring(indexFirstBracket + firstIndexOffset, indexSecondBracket);
