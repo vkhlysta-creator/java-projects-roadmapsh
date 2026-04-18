@@ -9,16 +9,11 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class JsonReader {
 
-    public static void main(String[] args) {
-        List<Task> tasks = loadAll();
-        System.out.println(tasks);
 
-    }
 
     public static Task readTask(String jsonString){
             int idOffset = "id\":".length();
@@ -70,7 +65,7 @@ public class JsonReader {
             int indexSecondBracket = allLines.indexOf("]");
 
             if (allLines.isBlank()){
-                return Collections.emptyList();
+                return new ArrayList<>();
             }
 
             String stringWithoutBrackets = allLines.substring(indexFirstBracket + firstIndexOffset, indexSecondBracket);

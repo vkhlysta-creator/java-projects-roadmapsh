@@ -4,6 +4,9 @@ package de.volodymyr.learning;
 
 
 
+import de.volodymyr.learning.model.TaskStatus;
+import de.volodymyr.learning.service.TaskHandler;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -22,6 +25,94 @@ public class Main {
 
     public static void main(String[] args) {
 
+        if (args.length == 0) {
+            System.out.println("Usage: java Main <command> [arguments]");
+            System.out.println("Commands: add, list, update, delete");
+            return;
+        }
+
+
+        String command = args[0].toLowerCase();
+
+        switch (command) {
+            case "list" -> {
+                System.out.println("We are handling list for you");
+                TaskHandler.handleList();
+            }
+            case "add" -> {
+
+                if (args.length < 2) {
+                    System.out.println("Error: Please provide a task description.");
+                } else {
+                    System.out.println("Adding task: " + args[1]);
+                    TaskHandler.handleAdd(args[1]);
+                }
+            }
+            case "delete" -> {
+
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID of the task, which must be deleted");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleDelete(parsedId);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Incorrect ID, please provide an integer number");
+                    }
+                }
+            }
+            case "update" ->{
+                if (args.length < 3){
+                    System.out.println("Error: Please provide an ID of the task,and a new description");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, args[2], null);
+                    }catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
+            case "mark-in-progress" -> {
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, null, TaskStatus.IN_PROGRESS);
+                    }
+                    catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
+            case "mark-done" -> {
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, null, TaskStatus.DONE);
+                    }
+                    catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
+            default -> System.out.println("Unknown command: " + command);
+        }
+    }
 
 
 
@@ -33,4 +124,3 @@ public class Main {
 
 
     }
-}
