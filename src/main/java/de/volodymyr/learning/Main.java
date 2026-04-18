@@ -53,7 +53,13 @@ public class Main {
                     System.out.println("Error: Please provide an ID of the task, which must be deleted");
                 }
                 else {
-                    TaskHandler.handleDelete(args[1]);
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleDelete(parsedId);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Incorrect ID, please provide an integer number");
+                    }
                 }
             }
             default -> System.out.println("Unknown command: " + command);

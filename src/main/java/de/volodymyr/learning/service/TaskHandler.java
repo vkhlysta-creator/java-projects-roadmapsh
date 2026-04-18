@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 public class TaskHandler {
 
@@ -68,17 +67,14 @@ public class TaskHandler {
 
     }
 
-    public static void handleDelete(String id){
+    public static void handleDelete(int id){
         List<Task> currentTasks = JsonReader.loadAll();
-        String foundString = currentTasks.stream()
-                .map(JsonWriter::jsonConverter)
-                .filter(str -> str.contains("\"id\": " + id))
-                .collect(Collectors.joining());
 
-        if (foundString.isBlank())
+        boolean resultOfRemoving = currentTasks.removeIf(task -> task.id() == id);
+
+        if (!resultOfRemoving)
             System.out.println("Error: Task with ID:" + id + " not found");
         else {
-            currentTasks.remove(JsonReader.readTask(foundString));
             JsonWriter.jsonTaskWriter(JsonWriter.preparingListToWriting(currentTasks));
             System.out.println("Task " + id + " deleted successfully!");
         }
@@ -87,7 +83,7 @@ public class TaskHandler {
 
     }
 
-
+// Need to change a logik of handleDelete
 
 
 }
