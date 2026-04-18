@@ -83,33 +83,48 @@ public class TaskHandler {
 
     }
 
-    public static void handleUpdate(int id, String newDescription){
+    public static void handleUpdate(int id, String newDescription, TaskStatus newStatus){
         List<Task> currentListTasks = JsonReader.loadAll();
-        Task oldTask = null;
+        int index = findTaskIndex(currentListTasks, id);
+        TaskStatus finalStatus;
+        String finalDescription;
+
+        if (index != -1){
+            Task oldTask = currentListTasks.get(index);
+            if (newDescription == null)
+                finalDescription = oldTask.description();
+            else
+                finalDescription = newDescription;
+
+            if (newStatus == null)
+                finalStatus = oldTask.status();
+            else
+                finalStatus = newStatus;
+
+
+            currentListTasks.set(index, new Task(oldTask.id(), finalDescription, finalStatus , oldTask.createdAt(), LocalDateTime.now()));
+            JsonWriter.jsonTaskWriter(JsonWriter.preparingListToWriting(currentListTasks));
+            System.out.println("Success: Task-List was updated");
+        }else
+            System.out.println("Error: Such ID doesn't exist");
+
+
+    }
+
+
+    private static int findTaskIndex(List<Task> currentListTasks, int id){
         int index = -1;
 
         for (int i = 0; i < currentListTasks.size(); i++) {
             if (currentListTasks.get(i).id() == id){
                 index = i;
-                oldTask = currentListTasks.get(i);
                 break;
             }
         }
-
-        if (oldTask != null){
-            currentListTasks.set(index, new Task(oldTask.id(), newDescription, oldTask.status(), oldTask.createdAt(), LocalDateTime.now()));
-            JsonWriter.jsonTaskWriter(
-                    JsonWriter.preparingListToWriting(
-                        currentListTasks
-                    )
-            );
-            System.out.println("Task with ID:" + id + " was successfully updated");
-        }else
-            System.out.println("Error: Such an ID was not found");
-
-
-
+        return index;
     }
+
+
 
 
 

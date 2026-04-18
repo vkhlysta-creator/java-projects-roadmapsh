@@ -4,6 +4,7 @@ package de.volodymyr.learning;
 
 
 
+import de.volodymyr.learning.model.TaskStatus;
 import de.volodymyr.learning.service.TaskHandler;
 
 import java.nio.file.Path;
@@ -70,8 +71,40 @@ public class Main {
                     int parsedId;
                     try {
                         parsedId = Integer.parseInt(args[1]);
-                        TaskHandler.handleUpdate(parsedId, args[2]);
+                        TaskHandler.handleUpdate(parsedId, args[2], null);
                     }catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
+            case "mark-in-progress" -> {
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, null, TaskStatus.IN_PROGRESS);
+                    }
+                    catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
+            case "mark-done" -> {
+                if (args.length < 2){
+                    System.out.println("Error: Please provide an ID");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, null, TaskStatus.DONE);
+                    }
+                    catch (NumberFormatException e){
                         System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
                     }
                 }
