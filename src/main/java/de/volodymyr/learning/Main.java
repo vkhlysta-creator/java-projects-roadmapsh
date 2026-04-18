@@ -36,8 +36,20 @@ public class Main {
 
         switch (command) {
             case "list" -> {
-                System.out.println("We are handling list for you");
-                TaskHandler.handleList();
+                System.out.println("We are creating List for you");
+                if (args.length > 1){
+                    try {
+                        TaskHandler.handleList(TaskStatus.valueOf(args[1].toUpperCase().replace("-", "_")));
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(
+                                "You've entered an illegal argument\n" +
+                                        "You may: todo, in_progress, done, or just don't write anything to see all your tasks"
+
+                        );
+                    }
+
+                }else
+                    TaskHandler.handleList(null);
             }
             case "add" -> {
 
@@ -54,13 +66,9 @@ public class Main {
                     System.out.println("Error: Please provide an ID of the task, which must be deleted");
                 }
                 else {
-                    int parsedId;
-                    try {
-                        parsedId = Integer.parseInt(args[1]);
-                        TaskHandler.handleDelete(parsedId);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error: Incorrect ID, please provide an integer number");
-                    }
+                    int parsedId = parseInt(args[1]);
+                    TaskHandler.handleDelete(parsedId);
+
                 }
             }
             case "update" ->{
@@ -68,13 +76,9 @@ public class Main {
                     System.out.println("Error: Please provide an ID of the task,and a new description");
                 }
                 else {
-                    int parsedId;
-                    try {
-                        parsedId = Integer.parseInt(args[1]);
+                    int parsedId = parseInt(args[1]);
+                    if (parsedId != -1)
                         TaskHandler.handleUpdate(parsedId, args[2], null);
-                    }catch (NumberFormatException e){
-                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
-                    }
                 }
             }
 
@@ -83,14 +87,9 @@ public class Main {
                     System.out.println("Error: Please provide an ID");
                 }
                 else {
-                    int parsedId;
-                    try {
-                        parsedId = Integer.parseInt(args[1]);
+                    int parsedId = parseInt(args[1]);
+                    if (parsedId != -1)
                         TaskHandler.handleUpdate(parsedId, null, TaskStatus.IN_PROGRESS);
-                    }
-                    catch (NumberFormatException e){
-                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
-                    }
                 }
             }
 
@@ -99,14 +98,10 @@ public class Main {
                     System.out.println("Error: Please provide an ID");
                 }
                 else {
-                    int parsedId;
-                    try {
-                        parsedId = Integer.parseInt(args[1]);
+                    int parsedId = parseInt(args[1]);
+                    if (parsedId != -1)
                         TaskHandler.handleUpdate(parsedId, null, TaskStatus.DONE);
-                    }
-                    catch (NumberFormatException e){
-                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
-                    }
+
                 }
             }
 
@@ -114,13 +109,12 @@ public class Main {
         }
     }
 
+    private static int parseInt(String string){
+        try {
+            return Integer.parseInt(string);
+        }catch (NumberFormatException e){
+            System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+        }
 
-
-
-
-
-
-
-
-
-    }
+        return -1;
+    }}
