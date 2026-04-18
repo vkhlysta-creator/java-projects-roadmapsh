@@ -14,7 +14,6 @@ import java.util.NoSuchElementException;
 public class TaskHandler {
 
 
-
     public static void handleAdd(String description) throws NoSuchElementException{
         List<Task> currentListOfTasks = JsonReader.loadAll();
         int nextId;
@@ -38,12 +37,12 @@ public class TaskHandler {
             System.out.println("Your list of Tasks is empty! Chill");
         }
 
-        DateTimeFormatter Formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
 
-        System.out.println("-------------------------------------------------------------------");
-        System.out.printf("%-3s | %-12s | %-20s | %s%n", "ID"  , "Status", "Description" , "Created");
-        System.out.println("-------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------------");
+        System.out.printf("%-3s | %-12s | %-20s | %-20s | %s%n " , "ID"  , "Status", "Description" , "Created", "Updated");
+        System.out.println("---------------------------------------------------------------------------------------");
 
 
 
@@ -55,15 +54,16 @@ public class TaskHandler {
                 case DONE -> "[X]";
             };
 
-            System.out.printf("%-3s | %-12s | %-20s | %s%n",
+            System.out.printf("%-3s | %-12s | %-20s | %-20s | %s%n",
                     task.id(),
                     iconOfStatus +" " +  task.status(),
                     task.description(),
-                    task.createdAt().format(Formatter)
+                    task.createdAt().format(formatter),
+                    task.updatedAt().format(formatter)
                     );
 
         }
-        System.out.println("-------------------------------------------------------------------");
+        System.out.println("----------------------------------------------------------------------------------------");
 
     }
 
@@ -83,7 +83,35 @@ public class TaskHandler {
 
     }
 
-// Need to change a logik of handleDelete
+    public static void handleUpdate(int id, String newDescription){
+        List<Task> currentListTasks = JsonReader.loadAll();
+        Task oldTask = null;
+        int index = -1;
+
+        for (int i = 0; i < currentListTasks.size(); i++) {
+            if (currentListTasks.get(i).id() == id){
+                index = i;
+                oldTask = currentListTasks.get(i);
+                break;
+            }
+        }
+
+        if (oldTask != null){
+            currentListTasks.set(index, new Task(oldTask.id(), newDescription, oldTask.status(), oldTask.createdAt(), LocalDateTime.now()));
+            JsonWriter.jsonTaskWriter(
+                    JsonWriter.preparingListToWriting(
+                        currentListTasks
+                    )
+            );
+            System.out.println("Task with ID:" + id + " was successfully updated");
+        }else
+            System.out.println("Error: Such an ID was not found");
+
+
+
+    }
+
+
 
 
 }

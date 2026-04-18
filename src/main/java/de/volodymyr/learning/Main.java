@@ -62,6 +62,21 @@ public class Main {
                     }
                 }
             }
+            case "update" ->{
+                if (args.length < 3){
+                    System.out.println("Error: Please provide an ID of the task,and a new description");
+                }
+                else {
+                    int parsedId;
+                    try {
+                        parsedId = Integer.parseInt(args[1]);
+                        TaskHandler.handleUpdate(parsedId, args[2]);
+                    }catch (NumberFormatException e){
+                        System.out.println("Error: Incorrect ID, Please provide an integer number as second element");
+                    }
+                }
+            }
+
             default -> System.out.println("Unknown command: " + command);
         }
     }
